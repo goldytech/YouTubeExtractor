@@ -1,4 +1,3 @@
-import os
 import logging
 import os
 import re
@@ -9,7 +8,6 @@ import cv2
 import pytesseract
 import yt_dlp
 from dotenv import load_dotenv
-from httpx import Client
 from openai import OpenAI
 
 ###############################################################################
@@ -124,6 +122,7 @@ def gpt_parse_text(raw_text, song_name, film_name):
         return
 
     client = OpenAI()
+    logging.info("Calling OpenAI GPT for parsing text...")
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -132,17 +131,16 @@ def gpt_parse_text(raw_text, song_name, film_name):
                         "and musical notes (A, A#, B, Gb, etc.)."},
             {"role": "user", "content": "I am trying to extract lyrics ,notes and chords from a given text.\n"
                                         "" + raw_text + " \n for the song " + song_name + " from the movie " + film_name + "."
-                                                                                                                           "This is a Bollywood song. Present your response in the form of lyrics, notes and chords in a well defined structure line by line of the lyrics.\n"
-                                                                                                                           "Example: \n"
-                                                                                                                           "Lyrics: Line 1 of lyrics\n"
-                                                                                                                           "Notes: A, B, C\n"
-                                                                                                                           "Chords: C, E, G\n"
-                                                                                                                           "Extract the required information from the given text only."},
+                                                                                                                           "This is a Bollywood song."
+             "\n Ignore any text which is not part of this song's lyrics. \n"
+             "Map the right chords to the exact notes and lyrics from the given text. \n"
+             "Present your response in the form of lyrics, notes and chords in a well defined structure line by line of the lyrics.\n"
+                                                                                                          "Extract the required information from the given text only."},
         ]
     )
 
     response = completion.choices[0].message
-    print(response)
+    logging.debug(f"GPT response: {response.content.strip()}")
     with open("gpt_response.txt", "w", encoding="utf-8") as f:
         f.write(response.content.strip())
     logging.info("GPT response written to gpt_response.txt")
@@ -210,6 +208,7 @@ def ai_extraction(video_path, song_name, film_name, frame_step=FRAME_STEP, paral
     cap.release()
 
     combined_text = "".join(all_ocr_text)
+    logging.debug(f"Combined text: {combined_text}")
     gpt_parse_text(combined_text, song_name, film_name)
 
     results = []

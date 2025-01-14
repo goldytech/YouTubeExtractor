@@ -11,15 +11,16 @@ This project uses OpenAI's GPT model to parse text from video frames into lyrics
 
 ## Requirements
 
-- Python 3.12
+- Python 3.11+
 - OpenAI API key
 - Poetry for dependency management
+- Tesseract OCR (must be pre-installed)
 
 ## Installation
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/YouTubeExtractor.git
+    git clone https://github.com/goldytech/YouTubeExtractor.git
     cd YouTubeExtractor
     ```
 
@@ -33,7 +34,18 @@ This project uses OpenAI's GPT model to parse text from video frames into lyrics
     poetry install
     ```
 
-4. Set up your OpenAI API key:
+4. Install Tesseract OCR:
+    - On macOS:
+      ```sh
+      brew install tesseract
+      ```
+    - On Ubuntu:
+      ```sh
+      sudo apt-get install tesseract-ocr
+      ```
+    - On Windows, download the installer from [Tesseract at UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki).
+
+5. Set up your OpenAI API key:
     - Create a `.env` file in the project root directory.
     - Add your OpenAI API key to the `.env` file:
       ```
@@ -54,7 +66,14 @@ This project uses OpenAI's GPT model to parse text from video frames into lyrics
 ## Project Structure
 
 - `main2.py`: The main script to run the project.
+- `ai_extraction.py`: Contains the function to extract frames, perform OCR, and call GPT.
+- `.gitignore`: Specifies files and directories to be ignored by Git.
+- `README.md`: This file.
 
+## Outputs
+
+- `notes_and_words.txt`: Contains the parsed lyrics, notes, and chords.
+- `gpt_response.txt`: Contains the raw response from the GPT model.
 
 ## License
 
