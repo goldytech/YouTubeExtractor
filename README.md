@@ -63,6 +63,10 @@ This project uses OpenAI's GPT model to parse text from video frames into lyrics
 
 3. The script will download the video, extract frames, perform OCR, and use GPT to parse the text. The results will be saved in `notes_and_words.txt`.
 
+## Important
+
+This script has been mostly tested with the following YouTube channel: [Sudeshna Instrumentals](https://www.youtube.com/@sudeshnainstrumentals). For other channels, the output may vary.
+
 ## Project Structure
 
 - `main2.py`: The main script to run the project.
